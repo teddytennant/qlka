@@ -12,10 +12,10 @@ import jax
 import jax.numpy as jnp
 
 # Phi_tau(q, k) = Phi(q / tau, k / tau).
-# Defaults: add_laplace tau=6, add_bump tau=0.5, add_riesz tau=1, eps=1e-3.
-# Figure 1 brackets add_laplace at 0.5 and add_bump at 1.5; pass tau to match.
-DEFAULT_LAPLACE_TAU = 6.0
-DEFAULT_BUMP_TAU = 0.5
+# Section 4: add_laplace tau=0.5, add_bump tau=1.5, add_riesz tau=1.
+# The full L1 Laplace kernel, which this package does not implement, uses tau=6.
+DEFAULT_LAPLACE_TAU = 0.5
+DEFAULT_BUMP_TAU = 1.5
 DEFAULT_RIESZ_TAU = 1.0
 RIESZ_EPS = 1e-3
 
@@ -241,14 +241,14 @@ def additive_abs_sum(q, k, v):
 
 
 def add_laplace_sum(q, k, v, tau=DEFAULT_LAPLACE_TAU):
-    """Additive Laplace kernel sum. Default tau is 6."""
+    """Additive Laplace kernel sum. Default tau is 0.5."""
     q, k, v = _as_qkv(q, k, v)
     tau = jnp.asarray(tau, dtype=q.dtype)
     return _sum_over_dims(q / tau, k / tau, v, weighted_laplace_sum)
 
 
 def add_bump_sum(q, k, v, tau=DEFAULT_BUMP_TAU):
-    """Additive bump kernel sum. Default tau is 0.5. Uses Algorithm 1, not a Python loop."""
+    """Additive bump kernel sum. Default tau is 1.5. Uses Algorithm 1, not a Python loop."""
     q, k, v = _as_qkv(q, k, v)
     tau = jnp.asarray(tau, dtype=q.dtype)
 

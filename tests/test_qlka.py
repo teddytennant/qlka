@@ -77,19 +77,19 @@ def test_runs_on_cpu():
 
 
 def test_default_bandwidths():
-    assert DEFAULT_LAPLACE_TAU == 6.0
-    assert DEFAULT_BUMP_TAU == 0.5
+    assert DEFAULT_LAPLACE_TAU == 0.5
+    assert DEFAULT_BUMP_TAU == 1.5
     assert DEFAULT_RIESZ_TAU == 1.0
     assert RIESZ_EPS == 1e-3
     q = jnp.array([[0.0, 1.0]], dtype=jnp.float64)
     k = jnp.array([[1.0, 0.0]], dtype=jnp.float64)
     v = jnp.ones((1, 1), dtype=jnp.float64)
     z = add_laplace_sum(q, k, v)
-    _check(z, add_laplace_sum(q, k, v, tau=6.0))
-    assert float(jnp.max(jnp.abs(z - add_laplace_sum(q, k, v, tau=0.5)))) > 1e-3
+    _check(z, add_laplace_sum(q, k, v, tau=0.5))
+    assert float(jnp.max(jnp.abs(z - add_laplace_sum(q, k, v, tau=6.0)))) > 1e-3
     zb = add_bump_sum(q, k, v)
-    _check(zb, add_bump_sum(q, k, v, tau=0.5))
-    assert float(jnp.max(jnp.abs(zb - add_bump_sum(q, k, v, tau=1.5)))) > 1e-3
+    _check(zb, add_bump_sum(q, k, v, tau=1.5))
+    assert float(jnp.max(jnp.abs(zb - add_bump_sum(q, k, v, tau=0.5)))) > 1e-3
 
 
 def test_algorithm1_matches_naive_with_tie():
